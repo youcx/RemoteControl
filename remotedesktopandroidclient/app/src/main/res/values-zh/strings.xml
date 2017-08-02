@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">RemoteControl</string>
+    <string name="action_help">帮助</string>
+    <string name="action_settings">设置</string>
+    <string name="connect">连接</string>
+    <string name="file_download">文件下载</string>
+    <string name="file_transfer">文件传输</string>
+    <string name="hello_blank_fragment">Hello</string>
+    <string name="hello_world">Hello World</string>
+    <string name="help">帮助</string>
+    <string name="help_url">https://github.com/varunon9/Remote-Control-PC</string>
+    <string name="image_viewer">图片浏览</string>
+    <string name="keyboard">键盘</string>
+    <string name="media_player">媒体播放器</string>
+    <string name="navigation_drawer_close">关闭抽屉</string>
+    <string name="navigation_drawer_open">打开抽屉</string>
+    <string name="power_off">关闭电源</string>
+    <string name="presentation">实时屏幕</string>
+    <string name="title_activity_help">帮助界面</string>
+    <string name="title_activity_music_control">音乐控制</string>
+    <string name="title_activity_touch_pad">触摸板</string>
+    <string name="touchpad">触摸板</string>
+    <string name="left_click">左点击</string>
+</resources>
