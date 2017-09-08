@@ -9,15 +9,19 @@ import com.newtrekwang.commonactivity.SharePreferenceUtil;
 import com.newtrekwang.commonlib.http.ApiCallBack;
 import com.newtrekwang.commonlib.http.SubscriberCallBack;
 import com.newtrekwang.remotecontrol.bean.Result;
+import com.newtrekwang.remotecontrol.bean.Login_json_;
+import com.newtrekwang.remotecontrol.devices.DevicesFragment;
 import com.newtrekwang.remotecontrol.main.MainActivity;
 import com.newtrekwang.remotecontrol.model.ModelManager;
 
+import io.reactivex.Observer;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 
 import static com.newtrekwang.remotecontrol.util.Constants.AUTOLOGIN;
 import static com.newtrekwang.remotecontrol.util.Constants.PHONE;
 import static com.newtrekwang.remotecontrol.util.Constants.SESSIONID;
+import static com.newtrekwang.remotecontrol.util.Constants.USERNAME;
 
 /**
  * auther    : WJX
@@ -56,7 +60,7 @@ public class LoginActivity extends BaseLoginActivity {
     @Override
     protected void startLoginTask(final String phone, String pwd) {
         modelManager.login(phone,pwd)
-                .subscribe(new SubscriberCallBack<Result<String>>(new ApiCallBack<Result<String>>() {
+                .subscribe(new SubscriberCallBack<Result<Login_json_>>(new ApiCallBack<Result<Login_json_>>() {
                     @Override
                     public void onStart(Disposable d) {
 //                        开始订阅
@@ -72,13 +76,17 @@ public class LoginActivity extends BaseLoginActivity {
                     }
 
                     @Override
-                    public void onNext(Result<String> stringResult) {
+                    public void onNext(Result<Login_json_> stringResult) {
                         showProgress(false);
                         if (stringResult!=null){
                             if (stringResult.getStatus()==1){
-                                SharePreferenceUtil.setParam(LoginActivity.this,SESSIONID,stringResult.getResult());
+                                Log.e("saddf",stringResult.getResult().getSessionid());
+                                SharePreferenceUtil.setParam(LoginActivity.this,SESSIONID,stringResult.getResult().getSessionid());
                                 SharePreferenceUtil.setParam(LoginActivity.this,AUTOLOGIN,true);
                                 SharePreferenceUtil.setParam(LoginActivity.this,PHONE,phone);
+                                SharePreferenceUtil.setParam(LoginActivity.this,USERNAME,stringResult.getResult());
+                                Intent intent=new Intent(LoginActivity.this, DevicesFragment.class);
+                                intent.putExtra("sessionid",stringResult.getResult().getSessionid());
                                 goMain();
                             }
                         }

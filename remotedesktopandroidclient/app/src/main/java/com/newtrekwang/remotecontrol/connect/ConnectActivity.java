@@ -9,7 +9,9 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
@@ -51,6 +53,19 @@ public class ConnectActivity extends AppCompatActivity {
     private LocalBroadcastManager mLocalBroadcastManager;
 //    广播接收者
     private BroadcastReceiver broadcastReceiver;
+    //定义屏幕宽高
+    int screenwidth;
+    int screenheight;
+    //定义图片宽高
+    int picwidth;
+    int picheight;
+    //定义触摸点xy
+    int rawx;
+    int rawy;
+    int i=1;
+    //定义鼠标手势
+    private MyGestureListener mgListener;
+    private GestureDetector mDetector;
 
 
     /**
@@ -62,19 +77,29 @@ public class ConnectActivity extends AppCompatActivity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);//设置全屏
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_connect);
+        //获取屏幕宽高
+        DisplayMetrics dm = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(dm);
+        screenwidth=dm.widthPixels;
+        screenheight=dm.heightPixels;
+        //实例化GestureListener与GestureDetector对象，鼠标操作
+        mgListener = new MyGestureListener();
+        mDetector = new GestureDetector(this, mgListener);
         ButterKnife.bind(this);
         init();
 //            if(CustomApplication.getApplication().getSocket()!=null) {
 //                将全局变量socket赋给client
 //                client = CustomApplication.getApplication().getSocket();
 //            }
-        connectActivityImg.setOnTouchListener(new View.OnTouchListener(){
+       /* connectActivityImg.setOnTouchListener(new View.OnTouchListener(){
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                if(event.getAction()==MotionEvent.ACTION_DOWN)
+                if(event.getAction()==MotionEvent.ACTION_UP)
                 {
-                    int x =(int) event.getX();
-                    int y =(int) event.getY();
+                    int rawx =(int) event.getRawX();
+                    int rawy =(int) event.getRawY();
+                    int x=rawx*picwidth/screenwidth;
+                    int y=rawy*picheight/screenheight;
                     if(CustomApplication.getApplication().getSocket()!=null){
                     //触摸后发送触摸点坐标
                     sendXY(x, y, CustomApplication.getApplication().getSocket());
@@ -83,7 +108,65 @@ public class ConnectActivity extends AppCompatActivity {
                 }
                 return true;
             }
-        });
+        });*/
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        return mDetector.onTouchEvent(event);
+    }
+
+    private class MyGestureListener implements GestureDetector.OnGestureListener
+    {
+        @Override
+        public boolean onDown(MotionEvent event) {
+            //触摸点xy
+            rawx =(int) event.getRawX();
+            rawy =(int) event.getRawY();
+            return false;
+        }
+
+        @Override
+        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+            int x=rawx*picwidth/screenwidth;
+            int y=rawy*picheight/screenheight;
+            if(CustomApplication.getApplication().getSocket()!=null){
+                //触摸后发送触摸点坐标
+                sendXY(x, y,(byte)4 ,CustomApplication.getApplication().getSocket());
+            }
+            return false;
+        }
+
+        @Override
+        public void onLongPress(MotionEvent e) {
+            int x=rawx*picwidth/screenwidth;
+            int y=rawy*picheight/screenheight;
+            if(CustomApplication.getApplication().getSocket()!=null){
+                //触摸后发送触摸点坐标
+                sendXY(x, y,(byte)3 ,CustomApplication.getApplication().getSocket());
+            }
+        }
+
+        @Override
+        public void onShowPress(MotionEvent e) {
+
+        }
+
+        @Override
+        public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+            return false;
+        }
+
+        @Override
+        public boolean onSingleTapUp(MotionEvent e) {
+            int x=rawx*picwidth/screenwidth;
+            int y=rawy*picheight/screenheight;
+            if(CustomApplication.getApplication().getSocket()!=null){
+                //触摸后发送触摸点坐标
+                sendXY(x,y,(byte)2 ,CustomApplication.getApplication().getSocket());
+            }
+            return false;
+        }
     }
 /**
  * 初始化一些数据和控件显示
@@ -102,7 +185,7 @@ public class ConnectActivity extends AppCompatActivity {
     /**
      * 发送触摸坐标
      */
-    private void sendXY(int x,int y,Socket socket)
+    private void sendXY(int x,int y,byte order,Socket socket)
     {
         try {
 
@@ -111,16 +194,17 @@ public class ConnectActivity extends AppCompatActivity {
             byte[] header=new byte[8];
             header[0]=1;
             header[1]=7;
+            header[5]=9;
             ops.write(header);
             ops.flush();
             //发送坐标
             byte[] xy=new byte[9];
-            xy[0]=2;
+            xy[0]=order;
             byte[] xbyte= BytesUtil.intToByte(x);
             byte[] ybyte=BytesUtil.intToByte(y);
             System.arraycopy(xbyte, 0,xy, 1, 4);
             System.arraycopy(ybyte,0,xy,5,4);
-            for(int i=1;i<9;i++)
+            for(int i=0;i<9;i++)
             {
                 Log.i(TAG," "+xy[i]+"/n");
             }
@@ -129,7 +213,7 @@ public class ConnectActivity extends AppCompatActivity {
             Log.i(TAG, "发送xy成功："+x+","+y );
         }catch (Exception e)
         {
-            Log.d(TAG, "send err");
+            Log.i(TAG, "send err");
         }
     }
 
@@ -166,6 +250,7 @@ public class ConnectActivity extends AppCompatActivity {
             CustomApplication.getApplication().getSocket().close();
             Log.i(TAG, "关闭连接" );
         } catch (IOException e) {
+            Log.i(TAG,"退出异常");
             e.printStackTrace();
         }
     }
@@ -186,8 +271,20 @@ public class ConnectActivity extends AppCompatActivity {
                         @Override
                         public void run() {
 //                            刷新UI，显示图片
-                            Bitmap bitmap= BitmapFactory.decodeFile(path);
-                            connectActivityImg.setImageBitmap(bitmap);
+                            if(i==1) {
+                                //将第一次的图片宽高赋值
+                                BitmapFactory.Options options = new BitmapFactory.Options();
+                                Bitmap bitmap = BitmapFactory.decodeFile(path,options);
+                                picwidth=options.outWidth;
+                                picheight=options.outHeight;
+                                connectActivityImg.setImageBitmap(bitmap);
+                                i=0;
+                            }
+                            else
+                            {
+                                Bitmap bitmap = BitmapFactory.decodeFile(path);
+                                connectActivityImg.setImageBitmap(bitmap);
+                            }
                         }
                     });
 

@@ -1,10 +1,12 @@
 package com.newtrekwang.remotecontrol.service;
 
 import android.app.IntentService;
+import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
+import android.view.inputmethod.InputMethodManager;
 
 import com.newtrekwang.remotecontrol.CustomApplication;
 import com.newtrekwang.remotecontrol.util.BytesUtil;
@@ -27,8 +29,10 @@ import java.net.Socket;
 public class ConnectService extends IntentService {
     private static final String TAG = "ConnectService>>>>>";
     //    TCP服务端IP
-    public static final String IP = "119.29.201.35";
+    public static final String IP = "192.168.1.123";
+    //public static final String IP = "119.29.201.35";
     //    TCP服务端端口
+    //public static final int PORT=12346;
     public static final int PORT = 9900;
     //  广播管理器
     private LocalBroadcastManager mLocalBroadcastManager;
@@ -117,7 +121,7 @@ public class ConnectService extends IntentService {
             byte[] bytes = new byte[8];
             bytes[0] = 1;
             bytes[1] = 2;
-            byte[] ipbytes = IpUtil.getBytesFromIPString(pcip);//IP字符串转换为字节数据
+            byte[] ipbytes = IpUtil.getBytesFromIPString("192.168.1.109");//IP字符串转换为字节数据
             System.arraycopy(ipbytes, 0, bytes, 2, 4);
             Log.i(TAG, "sendMe: >>>>>>发送IP  : " + pcip + "    " + HexString.bytesToHex(bytes));
             outputStream.write(bytes);
@@ -145,43 +149,51 @@ public class ConnectService extends IntentService {
         try {
             inputStream = socket.getInputStream();
             while (true) {
+                byte[] header=new byte[8];
                 byte[] bytes = new byte[1024];
                 int length = 0;
 //                首先读取8个字节的包头，read方法会阻塞直到读到数据
-                length = inputStream.read(bytes, 0, 8);
+                length = inputStream.read(header, 0, 8);
                 if (length == 8) {
                     length = 0;//清空读到的长度
                     byte[] len = new byte[4];
-                    len[0] = bytes[2];
-                    len[1] = bytes[3];
-                    len[2] = bytes[4];
-                    len[3] = bytes[5];
+                    len[0] = header[2];
+                    len[1] = header[3];
+                    len[2] = header[4];
+                    len[3] = header[5];
 //                    包体长度
                     int bodyLength = BytesUtil.byteArrayToInt(len);
-                    Log.i(TAG, "dealRead: 收到包头 解析内容为：" + HexString.bytesToHex(bytes, 8) + " body length:" + bodyLength);
-                    switch (bytes[0]) {//判断指令类型
+                    Log.i(TAG, "dealRead: 收到包头 解析内容为：" + HexString.bytesToHex(header, 8) + " body length:" + bodyLength);
+                    switch (header[0]) {//判断指令类型
                         case 1:
+                            //InputMethodManager inputMethodManager=(InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                            //inputMethodManager.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
                             // TODO: 2017/7/30
                             break;
                         case 2:
-                            if (bytes[1] == 2) {//发来是图片
-                                File file = new File(getFilesDir(), "1.webp");
+                            if (header[1] == 2) {//发来是图片
+                               // File file = new File(getFilesDir(), "1.webp");
+                                File file=new File("/storage/emulated/0/1.webp");
                                 if (!file.exists()) {
                                     file.createNewFile();
                                 }
                                 int size = 0;
                                 FileOutputStream fileOutputStream = new FileOutputStream(file);
                                 while (size != bodyLength) {
+                                    if(bodyLength-size>=1024)
                                     length = inputStream.read(bytes);
+                                    else
+                                        length=inputStream.read(bytes,0,bodyLength-size);
                                     fileOutputStream.write(bytes, 0, length);
                                     size += length;
-                                    Log.i(TAG, "dealRead: >>>>>>>收到长度" + size);
+                                 //   Log.i(TAG, "dealRead: >>>>>>>收到长度" + size);
+                                  //  Log.i(TAG,"dealRead: >>>>>>>已完成"+size/bodyLength*100+"%");
                                 }
                                 Log.i(TAG, "dealRead: 结束接收文件保存文件在" + file.getAbsolutePath());
                                 fileOutputStream.close();
-                                length = 0;
 //                            广播通知显示图片
                                 Intent intent = new Intent(SHOWIMAGE_BROADCAST_ACTION);
+
                                 intent.putExtra("path", file.getAbsoluteFile().toString());
                                 mLocalBroadcastManager.sendBroadcast(intent);
                             }

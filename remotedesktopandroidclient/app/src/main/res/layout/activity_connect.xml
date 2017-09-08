@@ -10,8 +10,10 @@
         android:id="@+id/connectActivity_img"
         android:keepScreenOn="true"
         android:scaleType="centerCrop"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:srcCompat="@drawable/custom_theme_color" />
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:srcCompat="@drawable/custom_theme_color"
+        />
+
 
 </android.support.constraint.ConstraintLayout>

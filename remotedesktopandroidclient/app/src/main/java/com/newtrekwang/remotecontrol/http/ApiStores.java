@@ -2,6 +2,7 @@ package com.newtrekwang.remotecontrol.http;
 
 
 import com.newtrekwang.remotecontrol.bean.LoginUserInfo;
+import com.newtrekwang.remotecontrol.bean.Login_json_;
 import com.newtrekwang.remotecontrol.bean.PCdevice;
 import com.newtrekwang.remotecontrol.bean.PcByIp;
 import com.newtrekwang.remotecontrol.bean.PcByMac;
@@ -31,7 +32,7 @@ public interface ApiStores {
      * @return
      */
     @POST("login")
-    Observable<Result<String>> login(@Body LoginUserInfo loginUserInfo);
+    Observable<Result<Login_json_>> login(@Body LoginUserInfo loginUserInfo);
 
     /**
      * 注册

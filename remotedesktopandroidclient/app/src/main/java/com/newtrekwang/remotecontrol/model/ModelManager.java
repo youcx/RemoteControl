@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.newtrekwang.remotecontrol.bean.Device;
 import com.newtrekwang.remotecontrol.bean.LoginUserInfo;
+import com.newtrekwang.remotecontrol.bean.Login_json_;
 import com.newtrekwang.remotecontrol.bean.PCdevice;
 import com.newtrekwang.remotecontrol.bean.PcByIp;
 import com.newtrekwang.remotecontrol.bean.PcByMac;
@@ -42,7 +43,7 @@ public class ModelManager {
      * Return type: Observable<Result<String>> 登录任务被观察者
      * Desc       : 登录
      */
-    public Observable<Result<String>> login(String phone, String password) {
+    public Observable<Result<Login_json_>> login(String phone, String password) {
         LoginUserInfo loginUserInfo = new LoginUserInfo(phone, password);
         return MyHttpClient
                 .getApi()
