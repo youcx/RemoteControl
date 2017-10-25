@@ -132,7 +132,9 @@ public class ConnectActivity extends AppCompatActivity {
             int y=rawy*picheight/screenheight;
             if(CustomApplication.getApplication().getSocket()!=null){
                 //触摸后发送触摸点坐标
-                sendXY(x, y,(byte)4 ,CustomApplication.getApplication().getSocket());
+                //sendXY(x, y,(byte)4 ,CustomApplication.getApplication().getSocket());
+                SendXYThread send=new SendXYThread(x, y,(byte)4 ,CustomApplication.getApplication().getSocket());
+                send.start();
             }
             return false;
         }
@@ -143,7 +145,9 @@ public class ConnectActivity extends AppCompatActivity {
             int y=rawy*picheight/screenheight;
             if(CustomApplication.getApplication().getSocket()!=null){
                 //触摸后发送触摸点坐标
-                sendXY(x, y,(byte)3 ,CustomApplication.getApplication().getSocket());
+                //sendXY(x, y,(byte)3 ,CustomApplication.getApplication().getSocket());
+                SendXYThread send=new SendXYThread(x, y,(byte)3 ,CustomApplication.getApplication().getSocket());
+                send.start();
             }
         }
 
@@ -163,7 +167,9 @@ public class ConnectActivity extends AppCompatActivity {
             int y=rawy*picheight/screenheight;
             if(CustomApplication.getApplication().getSocket()!=null){
                 //触摸后发送触摸点坐标
-                sendXY(x,y,(byte)2 ,CustomApplication.getApplication().getSocket());
+                //sendXY(x,y,(byte)2 ,CustomApplication.getApplication().getSocket());
+                SendXYThread send=new SendXYThread(x, y,(byte)2 ,CustomApplication.getApplication().getSocket());
+                send.start();
             }
             return false;
         }
@@ -187,34 +193,8 @@ public class ConnectActivity extends AppCompatActivity {
      */
     private void sendXY(int x,int y,byte order,Socket socket)
     {
-        try {
 
-            OutputStream ops = socket.getOutputStream();
-            //发送包头
-            byte[] header=new byte[8];
-            header[0]=1;
-            header[1]=7;
-            header[5]=9;
-            ops.write(header);
-            ops.flush();
-            //发送坐标
-            byte[] xy=new byte[9];
-            xy[0]=order;
-            byte[] xbyte= BytesUtil.intToByte(x);
-            byte[] ybyte=BytesUtil.intToByte(y);
-            System.arraycopy(xbyte, 0,xy, 1, 4);
-            System.arraycopy(ybyte,0,xy,5,4);
-            for(int i=0;i<9;i++)
-            {
-                Log.i(TAG," "+xy[i]+"/n");
-            }
-            ops.write(xy);
-            ops.flush();
-            Log.i(TAG, "发送xy成功："+x+","+y );
-        }catch (Exception e)
-        {
-            Log.i(TAG, "send err");
-        }
+
     }
 
     /**
@@ -284,6 +264,7 @@ public class ConnectActivity extends AppCompatActivity {
                             {
                                 Bitmap bitmap = BitmapFactory.decodeFile(path);
                                 connectActivityImg.setImageBitmap(bitmap);
+                                Log.i("ConnectActivity","显示图片");
                             }
                         }
                     });

@@ -29,11 +29,11 @@ import java.net.Socket;
 public class ConnectService extends IntentService {
     private static final String TAG = "ConnectService>>>>>";
     //    TCP服务端IP
-    public static final String IP = "192.168.1.123";
+    public static final String IP = "192.168.1.101";
     //public static final String IP = "119.29.201.35";
     //    TCP服务端端口
-    //public static final int PORT=12346;
-    public static final int PORT = 9900;
+   // public static final int PORT=12346;
+    public static final int PORT = 9000;
     //  广播管理器
     private LocalBroadcastManager mLocalBroadcastManager;
     //    广播消息类型标志
@@ -121,7 +121,7 @@ public class ConnectService extends IntentService {
             byte[] bytes = new byte[8];
             bytes[0] = 1;
             bytes[1] = 2;
-            byte[] ipbytes = IpUtil.getBytesFromIPString("192.168.1.109");//IP字符串转换为字节数据
+            byte[] ipbytes = IpUtil.getBytesFromIPString("192.168.1.105");//IP字符串转换为字节数据
             System.arraycopy(ipbytes, 0, bytes, 2, 4);
             Log.i(TAG, "sendMe: >>>>>>发送IP  : " + pcip + "    " + HexString.bytesToHex(bytes));
             outputStream.write(bytes);
@@ -147,8 +147,9 @@ public class ConnectService extends IntentService {
     private void dealRead(Socket socket) {
         InputStream inputStream = null;
         try {
+            boolean i=true;
             inputStream = socket.getInputStream();
-            while (true) {
+            while (i) {
                 byte[] header=new byte[8];
                 byte[] bytes = new byte[1024];
                 int length = 0;
@@ -171,7 +172,7 @@ public class ConnectService extends IntentService {
                             // TODO: 2017/7/30
                             break;
                         case 2:
-                            if (header[1] == 2) {//发来是图片
+                            if ((header[1] == 2)) {//发来是图片
                                // File file = new File(getFilesDir(), "1.webp");
                                 File file=new File("/storage/emulated/0/1.webp");
                                 if (!file.exists()) {
@@ -196,9 +197,14 @@ public class ConnectService extends IntentService {
 
                                 intent.putExtra("path", file.getAbsoluteFile().toString());
                                 mLocalBroadcastManager.sendBroadcast(intent);
+                            } else
+                            {
+                                i=false;
                             }
                             break;
                         default:
+                            Log.i("/////TAH","default");
+                            i=false;
                             break;
                     }
                 }

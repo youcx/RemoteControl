@@ -10,6 +10,7 @@ import com.newtrekwang.commonlib.http.ApiCallBack;
 import com.newtrekwang.commonlib.http.SubscriberCallBack;
 import com.newtrekwang.remotecontrol.bean.Result;
 import com.newtrekwang.remotecontrol.bean.Login_json_;
+import com.newtrekwang.remotecontrol.connect.ConnectActivity;
 import com.newtrekwang.remotecontrol.devices.DevicesFragment;
 import com.newtrekwang.remotecontrol.main.MainActivity;
 import com.newtrekwang.remotecontrol.model.ModelManager;
