@@ -29,10 +29,10 @@ import java.net.Socket;
 public class ConnectService extends IntentService {
     private static final String TAG = "ConnectService>>>>>";
     //    TCP服务端IP
-    public static final String IP = "192.168.1.101";
-    //public static final String IP = "119.29.201.35";
+   // public static final String IP = "192.168.1.112";
+    public static final String IP = "119.29.201.35";
     //    TCP服务端端口
-   // public static final int PORT=12346;
+    //public static final int PORT=12346;
     public static final int PORT = 9000;
     //  广播管理器
     private LocalBroadcastManager mLocalBroadcastManager;
@@ -42,6 +42,8 @@ public class ConnectService extends IntentService {
     public static final String SHOWIMAGE_BROADCAST_ACTION = "showimage";
     //    要连接的设备IP，需要从intent中获取
     private String pcip;
+    //    双缓存图片id；
+    private int pic_id;
 
 
     public ConnectService() {
@@ -55,6 +57,7 @@ public class ConnectService extends IntentService {
         super.onCreate();
         mLocalBroadcastManager = LocalBroadcastManager.getInstance(this);
         sendServiceStatus("服务启动");
+        pic_id=1;
     }
 
     /**
@@ -121,7 +124,7 @@ public class ConnectService extends IntentService {
             byte[] bytes = new byte[8];
             bytes[0] = 1;
             bytes[1] = 2;
-            byte[] ipbytes = IpUtil.getBytesFromIPString("192.168.1.105");//IP字符串转换为字节数据
+            byte[] ipbytes = IpUtil.getBytesFromIPString(pcip);//IP字符串转换为字节数据
             System.arraycopy(ipbytes, 0, bytes, 2, 4);
             Log.i(TAG, "sendMe: >>>>>>发送IP  : " + pcip + "    " + HexString.bytesToHex(bytes));
             outputStream.write(bytes);
@@ -134,6 +137,7 @@ public class ConnectService extends IntentService {
             bytes1[1] = 4;
             Log.i(TAG, "sendMe: 发送开始图片指令" + HexString.bytesToHex(bytes1));
             outputStream.write(bytes1);
+            Log.i(TAG, "sendMe: 发送开始图片指令" + HexString.bytesToHex(bytes1));
             outputStream.flush();
 
         } catch (IOException e) {
@@ -174,7 +178,13 @@ public class ConnectService extends IntentService {
                         case 2:
                             if ((header[1] == 2)) {//发来是图片
                                // File file = new File(getFilesDir(), "1.webp");
-                                File file=new File("/storage/emulated/0/1.webp");
+                                File file;
+                                //双图片进行缓冲
+                                if(pic_id==1)
+                                file=new File("/storage/emulated/0/pc_screen1.webp");
+                                else
+                                file=new File("/storage/emulated/0/pc_screen2.webp");
+
                                 if (!file.exists()) {
                                     file.createNewFile();
                                 }
@@ -197,6 +207,10 @@ public class ConnectService extends IntentService {
 
                                 intent.putExtra("path", file.getAbsoluteFile().toString());
                                 mLocalBroadcastManager.sendBroadcast(intent);
+                                if(pic_id==1)
+                                    pic_id=2;
+                                else
+                                    pic_id=1;
                             } else
                             {
                                 i=false;

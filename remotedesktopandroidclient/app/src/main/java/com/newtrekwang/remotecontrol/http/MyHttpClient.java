@@ -1,6 +1,7 @@
 package com.newtrekwang.remotecontrol.http;
 
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import com.orhanobut.logger.Logger;
@@ -82,6 +83,7 @@ public class MyHttpClient {
             String content = response.body().string();
             if (!TextUtils.isEmpty(content)) {
                 Logger.json(content);
+                Log.i("!!!!!!!!!!",content);
             }
             return response.newBuilder()
                     .body(okhttp3.ResponseBody.create(mediaType, content))

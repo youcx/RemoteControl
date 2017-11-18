@@ -147,7 +147,8 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_presentation) {
             showToast("暂未开发");
         } else if (id == R.id.nav_poweroff) {
-            showToast("暂未开发");
+            //showToast("暂未开发");
+          //  new DeletePCByMac().show(getSupportFragmentManager(),"deletePcByMac");
         } else if (id == R.id.bottom_device) {//设备
             toolbar.setTitle("设备");
            fragmentViewPager.setCurrentItem(0);

@@ -9,6 +9,7 @@ import com.newtrekwang.remotecontrol.bean.PcByMac;
 import com.newtrekwang.remotecontrol.bean.RegistUserInfo;
 import com.newtrekwang.remotecontrol.bean.Result;
 import com.newtrekwang.remotecontrol.bean.SessionUser;
+import com.newtrekwang.remotecontrol.bean.UpdateUsername;
 
 import java.util.List;
 
@@ -24,6 +25,11 @@ import retrofit2.http.POST;
  */
 
 public interface ApiStores {
+    /**
+    * 删除电脑
+    * */
+    @POST("deletePCByMac")
+    Observable<Result> deletepc(@Body DeletePcByMac deletePcByMac);
 
 
     /**
@@ -68,5 +74,13 @@ public interface ApiStores {
      */
     @POST("addPCByMac")
     Observable<Result> addPcByMAC(@Body PcByMac pcByMac);
+
+
+    /**
+     *修改用户名
+     */
+
+    @POST("updateUsername")
+    Observable<Result> Updateusername(@Body UpdateUsername updateUsername);
 
 }

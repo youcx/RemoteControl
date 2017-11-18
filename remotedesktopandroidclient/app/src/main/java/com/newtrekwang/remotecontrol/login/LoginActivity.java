@@ -85,7 +85,7 @@ public class LoginActivity extends BaseLoginActivity {
                                 SharePreferenceUtil.setParam(LoginActivity.this,SESSIONID,stringResult.getResult().getSessionid());
                                 SharePreferenceUtil.setParam(LoginActivity.this,AUTOLOGIN,true);
                                 SharePreferenceUtil.setParam(LoginActivity.this,PHONE,phone);
-                                SharePreferenceUtil.setParam(LoginActivity.this,USERNAME,stringResult.getResult());
+                                SharePreferenceUtil.setParam(LoginActivity.this,USERNAME,stringResult.getResult().getUsername());
                                 Intent intent=new Intent(LoginActivity.this, DevicesFragment.class);
                                 intent.putExtra("sessionid",stringResult.getResult().getSessionid());
                                 goMain();

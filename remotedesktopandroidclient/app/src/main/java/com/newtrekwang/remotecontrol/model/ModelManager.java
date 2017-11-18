@@ -11,6 +11,7 @@ import com.newtrekwang.remotecontrol.bean.PcByMac;
 import com.newtrekwang.remotecontrol.bean.RegistUserInfo;
 import com.newtrekwang.remotecontrol.bean.Result;
 import com.newtrekwang.remotecontrol.bean.SessionUser;
+import com.newtrekwang.remotecontrol.bean.UpdateUsername;
 import com.newtrekwang.remotecontrol.http.MyHttpClient;
 
 import java.util.ArrayList;
@@ -114,6 +115,18 @@ public class ModelManager {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
+   /*
+   更新用户名
+   */
+   public Observable<Result>Updateusername(String phoneunm,String sessionid,String username){
+       UpdateUsername updateUsername=new UpdateUsername(phoneunm,sessionid,username);
+       return MyHttpClient
+               .getApi()
+               .Updateusername(updateUsername)
+               .subscribeOn(Schedulers.io())
+               .observeOn(AndroidSchedulers.mainThread());
+   }
+
 
 
 

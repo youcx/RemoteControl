@@ -1,19 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.newtrekwang.remotecontrol.connect.ConnectActivity">
 
-    <ImageView
-        android:id="@+id/connectActivity_img"
-        android:keepScreenOn="true"
-        android:scaleType="centerCrop"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:srcCompat="@drawable/custom_theme_color"
-        />
+   <com.newtrekwang.remotecontrol.connect.ShowScreen
+       android:id="@+id/mshow"
+       android:layout_width="match_parent"
+       android:layout_height="match_parent"
+       android:scaleType="centerCrop"
+       tools:layout_editor_absoluteY="8dp"
+       tools:layout_editor_absoluteX="8dp" />
+   <Button
+       android:id="@+id/btn_input"
+       android:text="键盘"
+       android:layout_marginBottom="-25dp"
+       android:layout_centerHorizontal="true"
+       android:layout_alignBottom="@+id/mshow"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content" />
+   <android.inputmethodservice.KeyboardView
+       android:id="@+id/mKeyView"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:focusable="true"
+       android:focusableInTouchMode="true"
+       android:layout_alignBottom="@+id/mshow"
+       android:layout_alignRight="@+id/mshow"
+       android:visibility="gone"/>
 
 
-</android.support.constraint.ConstraintLayout>
+</RelativeLayout>

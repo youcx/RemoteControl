@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +18,10 @@ import com.ecloud.pulltozoomview.PullToZoomScrollViewEx;
 import com.gitonway.lee.niftymodaldialogeffects.lib.Effectstype;
 import com.gitonway.lee.niftymodaldialogeffects.lib.NiftyDialogBuilder;
 import com.newtrekwang.commonactivity.SharePreferenceUtil;
+import com.newtrekwang.commonlib.http.ApiCallBack;
+import com.newtrekwang.commonlib.http.SubscriberCallBack;
 import com.newtrekwang.remotecontrol.R;
+import com.newtrekwang.remotecontrol.bean.Result;
 import com.newtrekwang.remotecontrol.login.LoginActivity;
 import com.newtrekwang.remotecontrol.login.RegistDialog;
 import com.newtrekwang.remotecontrol.model.ModelManager;
@@ -27,6 +31,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
 
 /**
  * auther    : WJX
@@ -83,7 +88,7 @@ public class MyFragment extends Fragment implements View.OnClickListener {
         //        设置headerView
       View  headView = LayoutInflater.from(getActivity()).inflate(R.layout.profile_head_view, null, false);
         personUserName = (TextView) headView.findViewById(R.id.tv_user_name);
-        String userName = (String) SharePreferenceUtil.getParam(getActivity(), Constants.USERNAME, "匿名");//获取记录的登录的用户名
+        String userName = (String) SharePreferenceUtil.getParam(getActivity(), Constants.USERNAME,"");//获取记录的登录的用户名
         personUserName.setText(userName);//显示用户名
         headView.findViewById(R.id.tv_register).setOnClickListener(this);//注册按钮点击监听
         headView.findViewById(R.id.tv_logout).setOnClickListener(this);//退出按钮点击监听
@@ -171,9 +176,11 @@ public class MyFragment extends Fragment implements View.OnClickListener {
                         .setButton1Click(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                String str = edittext.getText().toString();
-                                if (!TextUtils.isEmpty(str)) {
-                                    updateUserName(str);
+                                String username = edittext.getText().toString();
+                                if (!TextUtils.isEmpty(username)) {
+                                    String phonenum=(String)SharePreferenceUtil.getParam(getActivity(),Constants.PHONE,"");//获取电话号码
+                                    String sessionid=(String)SharePreferenceUtil.getParam(getActivity(),Constants.SESSIONID,"");
+                                    updateuserName(phonenum,sessionid,username);
                                 }
                                 dialogBuilder_1.dismiss();
                             }
@@ -247,6 +254,8 @@ public class MyFragment extends Fragment implements View.OnClickListener {
         }
     }
 
+
+
     /**
      * 更新密码
      * @param str 新密码
@@ -265,10 +274,39 @@ public class MyFragment extends Fragment implements View.OnClickListener {
 
     /**
      * 跟新用户名
-     * @param str 新用户名
+     * @param username 新用户名
      */
-    private void updateUserName(String str) {
+    private void updateuserName(String phonenum, String sessionid, String username) {
+        modelManager=new ModelManager();
+        modelManager.Updateusername(phonenum,sessionid,username)
+                .subscribe(new SubscriberCallBack<Result>(new ApiCallBack<Result>() {
+                    @Override
+                    public void onStart(Disposable d) {
+                        compositeDisposable.add(d);
+                    }
 
+                    @Override
+                    public void onFailed(int code, String msg, Throwable e) {
+                        showToast(msg+" "+code);
+                        Log.e("Failed",e.getMessage());
+                    }
+
+                    @Override
+                    public void onNext(Result result) {
+                        if (result!=null){
+                            if (result.getStatus()==1){
+                                showToast(result.getMsg());
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCompleted() {
+                        Log.e("TAG","success");
+                        Intent intent=new Intent(getActivity(),LoginActivity.class);
+                        startActivity(intent);
+                    }
+                }));
     }
 
     /**
