@@ -21,7 +21,8 @@ import butterknife.ButterKnife;
  */
 public class DevicesAdapter extends RecyclerView.Adapter<DevicesAdapter.DeviceItemViewHolder> {
     //    item点击监听接口
-    private DeviceItemClickListenner deviceItemClickListenner;
+    private DeviceItemClickListener deviceItemClickListener;
+    private DeviceItemLongClickListener deviceItemLongClickListener;
     //    适配数据
     private List<PCdevice> datas;
 
@@ -70,17 +71,27 @@ public class DevicesAdapter extends RecyclerView.Adapter<DevicesAdapter.DeviceIt
      */
     @Override
     public void onBindViewHolder(final DeviceItemViewHolder holder, final int position) {
+
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (deviceItemClickListenner != null) {
-                    deviceItemClickListenner.onClick(holder.itemView, datas.get(holder.getAdapterPosition()));
+                    if (deviceItemClickListener != null) {
+                    deviceItemClickListener.onClick(holder.itemView, datas.get(holder.getAdapterPosition()));
                     }
                 }
             });
+        holder.itemView.setOnLongClickListener(new View.OnLongClickListener(){
+            @Override
+            public boolean onLongClick(View v) {
+                if(deviceItemLongClickListener!=null){
+                    deviceItemLongClickListener.longClick(holder.itemView,datas.get(holder.getAdapterPosition()));
+                }
+                return true;
+            }
+        });
        PCdevice device = datas.get(position);
-        if (!TextUtils.isEmpty(device.getIpaddr())) {
-        holder.devicesItemTvIp.setText(device.getIpaddr());
+        if (!TextUtils.isEmpty(device.getUid())) {
+        holder.devicesItemTvNum.setText(device.getUid());
         }
       if(!(TextUtils.isEmpty(device.getPcname()))){
           holder.devicesItemTvName.setText(device.getPcname());
@@ -107,15 +118,24 @@ public class DevicesAdapter extends RecyclerView.Adapter<DevicesAdapter.DeviceIt
     /**
      * 获取DeviceItemClickListenner
      */
-    public DeviceItemClickListenner getDeviceItemClickListenner() {
-        return deviceItemClickListenner;
+    public DeviceItemClickListener getDeviceItemClickListenner() {
+        return deviceItemClickListener;
     }
 
     /**
-     * 设置DeviceItemClickListenner
+     * 设置DeviceItemClickListenner点击
      */
-    public void setDeviceItemClickListenner(DeviceItemClickListenner deviceItemClickListenner) {
-        this.deviceItemClickListenner = deviceItemClickListenner;
+    public void setDeviceItemClickListenner(DeviceItemClickListener deviceItemClickListener) {
+        this.deviceItemClickListener = deviceItemClickListener;
+    }
+
+    /**
+     * 设置DeviceItem长按
+     * @param deviceItemLongClickListener
+     */
+
+    public void setDeviceItemLongClickListener(DeviceItemLongClickListener deviceItemLongClickListener){
+        this.deviceItemLongClickListener = deviceItemLongClickListener;
     }
 
     /**
@@ -124,8 +144,8 @@ public class DevicesAdapter extends RecyclerView.Adapter<DevicesAdapter.DeviceIt
     public class DeviceItemViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.devices_item_tv_name)
         TextView devicesItemTvName;
-        @BindView(R.id.devices_item_tv_ip)
-        TextView devicesItemTvIp;
+        @BindView(R.id.devices_item_tv_num)
+        TextView devicesItemTvNum;
         @BindView(R.id.devices_item_tv_mac)
         TextView devicesItemTvMac;
         @BindView(R.id.devices_item_tv_status)
@@ -139,7 +159,15 @@ public class DevicesAdapter extends RecyclerView.Adapter<DevicesAdapter.DeviceIt
     /**
      * 自定义item点击监听接口
      */
-    public interface DeviceItemClickListenner {
+    public interface DeviceItemClickListener {
         void onClick(View view, PCdevice device);
     }
+
+    /**
+     * 自定义item长按监听接口
+     */
+    public interface DeviceItemLongClickListener{
+        boolean longClick(View view,PCdevice device);
+    }
+
 }

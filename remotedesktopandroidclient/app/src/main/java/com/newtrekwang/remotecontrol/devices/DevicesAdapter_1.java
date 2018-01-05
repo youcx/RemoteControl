@@ -21,7 +21,7 @@ public class DevicesAdapter_1 extends BaseQuickAdapter<Device,BaseViewHolder> {
  */
     @Override
     protected void convert(BaseViewHolder helper, Device item) {
-        helper.setText(R.id.devices_item_tv_ip,item.getIp());
+        helper.setText(R.id.devices_item_tv_num,item.getIp());
         helper.setText(R.id.devices_item_tv_name,item.getName());
         helper.setText(R.id.devices_item_tv_mac,""+item.getPort());
     }

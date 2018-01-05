@@ -1,8 +1,11 @@
 package com.newtrekwang.remotecontrol.login;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.newtrekwang.commonactivity.BaseLoginActivity;
 import com.newtrekwang.commonactivity.SharePreferenceUtil;
@@ -48,9 +51,11 @@ public class LoginActivity extends BaseLoginActivity {
         super.onCreate(savedInstanceState);
         compositeDisposable=new CompositeDisposable();
         modelManager=new ModelManager();
-
-        mPhoneView.setText("18683668831");
-        mPasswordView.setText("123456");
+        SharedPreferences mSP=getSharedPreferences("userdata", Context.MODE_PRIVATE);
+        String phonenum=mSP.getString("phonenum","");
+        String passwd=mSP.getString("password","");
+        mPhoneView.setText(phonenum);
+        mPasswordView.setText(passwd);
     }
 
     /**
@@ -88,7 +93,16 @@ public class LoginActivity extends BaseLoginActivity {
                                 SharePreferenceUtil.setParam(LoginActivity.this,USERNAME,stringResult.getResult().getUsername());
                                 Intent intent=new Intent(LoginActivity.this, DevicesFragment.class);
                                 intent.putExtra("sessionid",stringResult.getResult().getSessionid());
+                                //
+                                SharedPreferences msp=getSharedPreferences("userdata",Context.MODE_PRIVATE);
+                                SharedPreferences.Editor editor=msp.edit();
+                                editor.putString("phonenum",mPhoneView.getText().toString());
+                                editor.putString("password",mPasswordView.getText().toString());
+                                editor.apply();
                                 goMain();
+                            }else if(stringResult.getStatus()==2)
+                            {
+                                mPhoneView.setError(stringResult.getMsg());
                             }
                         }
                     }
@@ -128,4 +142,5 @@ public class LoginActivity extends BaseLoginActivity {
         startActivity(intent);
         finish();
     }
+
 }

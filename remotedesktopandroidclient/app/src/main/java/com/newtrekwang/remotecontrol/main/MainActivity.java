@@ -15,11 +15,16 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.newtrekwang.commonactivity.SharePreferenceUtil;
 import com.newtrekwang.remotecontrol.R;
+import com.newtrekwang.remotecontrol.util.Constants;
 
 import static com.newtrekwang.remotecontrol.service.ConnectService.CONNECT_BROADCAST_ACTION;
 import static com.newtrekwang.remotecontrol.service.ConnectService.CONNECT_PROGRESS_BROADCAST_ACTION;
@@ -53,6 +58,7 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 //      抽屉菜单设置
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
@@ -88,6 +94,7 @@ public class MainActivity extends AppCompatActivity
 //          底部菜单设置
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);//底部菜单选中监听
+
 
 //        广播设置
         initBroadCast();
@@ -147,7 +154,7 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_presentation) {
             showToast("暂未开发");
         } else if (id == R.id.nav_poweroff) {
-            //showToast("暂未开发");
+            showToast("暂未开发");
           //  new DeletePCByMac().show(getSupportFragmentManager(),"deletePcByMac");
         } else if (id == R.id.bottom_device) {//设备
             toolbar.setTitle("设备");

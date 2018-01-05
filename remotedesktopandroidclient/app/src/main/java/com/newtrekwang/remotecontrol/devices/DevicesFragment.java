@@ -1,6 +1,8 @@
 package com.newtrekwang.remotecontrol.devices;
 
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -23,7 +25,10 @@ import com.newtrekwang.remotecontrol.R;
 import com.newtrekwang.remotecontrol.bean.PCdevice;
 import com.newtrekwang.remotecontrol.bean.Result;
 import com.newtrekwang.remotecontrol.connect.ConnectActivity;
+import com.newtrekwang.remotecontrol.login.LoginActivity;
 import com.newtrekwang.remotecontrol.model.ModelManager;
+import com.newtrekwang.remotecontrol.util.Constants;
+import com.newtrekwang.remotecontrol.util.DialogUtil;
 
 import java.util.List;
 
@@ -80,10 +85,36 @@ public class DevicesFragment extends Fragment {
         compositeDisposable = new CompositeDisposable();
         modelManager = new ModelManager();
         devicesAdapter = new DevicesAdapter();
-        devicesAdapter.setDeviceItemClickListenner(new DevicesAdapter.DeviceItemClickListenner() {
+        devicesAdapter.setDeviceItemClickListenner(new DevicesAdapter.DeviceItemClickListener() {
             @Override
             public void onClick(View view, PCdevice device) {
                 goConectActivity(device);
+            }
+        });
+
+        devicesAdapter.setDeviceItemLongClickListener(new DevicesAdapter.DeviceItemLongClickListener(){
+            @Override
+            public boolean longClick(View view, final PCdevice device) {
+                //删除电脑对话框
+                //LayoutInflater factory = LayoutInflater.from(getActivity());
+                AlertDialog.Builder ad1 = new AlertDialog.Builder(getActivity());
+                ad1.setTitle("删除电脑:");
+                ad1.setIcon(android.R.drawable.ic_dialog_info);
+                ad1.setMessage("是否删除当前名为："+device.getPcname()+"的电脑？");
+                ad1.setPositiveButton("是", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int i) {
+                        String phonenum=(String)SharePreferenceUtil.getParam(getActivity(), Constants.PHONE,"");//获取电话号码
+                        String sessionid=(String)SharePreferenceUtil.getParam(getActivity(),Constants.SESSIONID,"");
+                        deletepc(phonenum,sessionid,device.getUid());
+                    }
+                });
+                ad1.setNegativeButton("否", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int i) {
+
+                    }
+                });
+                ad1.show();// 显示对话框
+                return false;
             }
         });
     }
@@ -226,5 +257,37 @@ public class DevicesFragment extends Fragment {
         Toast.makeText(getActivity(), str, Toast.LENGTH_SHORT).show();
     }
 
+    private void deletepc(String phonenum,String sessionid,String uid)
+    {
+
+        modelManager=new ModelManager();
+        modelManager.deletepcbyuid(phonenum,sessionid,uid)
+                .subscribe(new SubscriberCallBack<Result>(new ApiCallBack<Result>() {
+                    @Override
+                    public void onStart(Disposable d) {
+                        compositeDisposable.add(d);
+                    }
+
+                    @Override
+                    public void onFailed(int code, String msg, Throwable e) {
+                        showToast(msg+" "+code);
+                        Log.e("Failed",e.getMessage());
+                    }
+
+                    @Override
+                    public void onNext(Result result) {
+                        if (result!=null){
+                            if (result.getStatus()==1){
+                                showToast(result.getMsg());
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCompleted() {
+                        upDate();
+                    }
+                }));
+    }
 
 }

@@ -1,15 +1,18 @@
 package com.newtrekwang.remotecontrol.http;
 
 
+import com.newtrekwang.remotecontrol.bean.DeletePcByUID;
 import com.newtrekwang.remotecontrol.bean.LoginUserInfo;
 import com.newtrekwang.remotecontrol.bean.Login_json_;
 import com.newtrekwang.remotecontrol.bean.PCdevice;
 import com.newtrekwang.remotecontrol.bean.PcByIp;
 import com.newtrekwang.remotecontrol.bean.PcByMac;
+import com.newtrekwang.remotecontrol.bean.PcByNum;
 import com.newtrekwang.remotecontrol.bean.RegistUserInfo;
 import com.newtrekwang.remotecontrol.bean.Result;
 import com.newtrekwang.remotecontrol.bean.SessionUser;
 import com.newtrekwang.remotecontrol.bean.UpdateUsername;
+import com.newtrekwang.remotecontrol.bean.UpdateUserpasswd;
 
 import java.util.List;
 
@@ -28,8 +31,8 @@ public interface ApiStores {
     /**
     * 删除电脑
     * */
-    @POST("deletePCByMac")
-    Observable<Result> deletepc(@Body DeletePcByMac deletePcByMac);
+    @POST("deletePCByUID")
+    Observable<Result> deletepcbyuid(@Body DeletePcByUID deletePcByUID);
 
 
     /**
@@ -80,7 +83,23 @@ public interface ApiStores {
      *修改用户名
      */
 
-    @POST("updateUsername")
+    @POST("updateUserName")
     Observable<Result> Updateusername(@Body UpdateUsername updateUsername);
+
+    /**
+     * 修改用户密码
+     * @param updateUserpasswd
+     * @return
+     */
+    @POST("updateUserPassword")
+    Observable<Result> Updateuserpasswd(@Body UpdateUserpasswd updateUserpasswd);
+
+
+    /**
+     *通过随机码添加PC
+     * @return
+     */
+    @POST("addPCByUID")
+    Observable<Result> addPCByNum(@Body PcByNum pcBynum);
 
 }

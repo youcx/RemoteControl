@@ -23,24 +23,6 @@
             android:background="#eeeeee" />
         <TextView
             android:layout_width="match_parent"
-            android:drawableLeft="@drawable/ic_call_black_24dp"
-            android:drawablePadding="10dp"
-            android:gravity="left|center_vertical"
-            android:text="修改手机号码"
-            android:id="@+id/person_phone"
-            android:paddingLeft="16dp"
-            android:textStyle="bold"
-            android:drawableRight="@drawable/ic__right_black_24dp"
-            android:paddingRight="16dp"
-            android:clickable="true"
-            android:background="@drawable/touch_bg"
-            android:layout_height="50dp" />
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#eeeeee" />
-        <TextView
-            android:layout_width="match_parent"
             android:drawableLeft="@drawable/ic_https_black_24dp"
             android:drawablePadding="10dp"
             android:gravity="left|center_vertical"

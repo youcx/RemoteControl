@@ -9,7 +9,7 @@ public class PcByIp {
     private String phonenum;
     private String ip;
     private String sessionid;
-private String pcname;
+    private String pcname;
 
     public PcByIp(String phonenum, String ip, String sessionid, String pcname) {
         this.phonenum = phonenum;

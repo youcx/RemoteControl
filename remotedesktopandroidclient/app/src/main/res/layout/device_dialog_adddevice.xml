@@ -58,7 +58,7 @@
                     android:id="@+id/adddevice_et_ip"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/pcip"
+                    android:hint="输入电脑上的唯一码"
                     android:maxLength="30"
                     android:maxLines="1"
                     android:singleLine="true" />

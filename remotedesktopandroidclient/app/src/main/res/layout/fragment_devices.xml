@@ -8,20 +8,23 @@
         android:layout_height="match_parent"
         android:id="@+id/devices_swipe_RefreshLayout"
         tools:context="com.newtrekwang.remotecontrol.devices.DevicesFragment">
-        <android.support.v7.widget.RecyclerView
-            android:layout_width="match_parent"
-            android:id="@+id/devices_recyclerView"
-            android:layout_height="match_parent">
-        </android.support.v7.widget.RecyclerView>
+
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:id="@+id/devices_recyclerView"
+        android:layout_height="match_parent">
+    </android.support.v7.widget.RecyclerView>
     </android.support.v4.widget.SwipeRefreshLayout>
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/device_fab_add"
         android:layout_width="wrap_content"
         android:layout_gravity="bottom|right"
-       android:layout_margin="16dp"
+        android:layout_margin="16dp"
         app:elevation="12dp"
-        android:src="@drawable/ic_action_name"
+        android:src="@mipmap/ic_addpc"
         app:pressedTranslationZ="12dp"
+        app:backgroundTint="@color/white"
         android:layout_height="wrap_content" />
 
 </FrameLayout>

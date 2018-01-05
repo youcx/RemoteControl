@@ -50,7 +50,7 @@
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginTop="8dp"
-            android:text="IP"
+            android:text="UID"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintHorizontal_bias="0.063"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -59,7 +59,7 @@
             app:layout_constraintVertical_bias="0.089" />
 
         <TextView
-            android:id="@+id/devices_item_tv_ip"
+            android:id="@+id/devices_item_tv_num"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="0dp"

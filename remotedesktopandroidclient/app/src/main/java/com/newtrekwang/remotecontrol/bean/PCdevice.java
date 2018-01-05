@@ -10,15 +10,15 @@ import java.io.Serializable;
 public class PCdevice implements Serializable {
 
     /**
-     * flag : 0
+     * flag : 0(1在线，0离线)
      * ipaddr : 119
      * mac : ccc
      */
 
     private int flag;
-    private String ipaddr;
+    private String uid;
     private String mac;
-    private String pcname;
+    private String pcName;
 
     public int getFlag() {
         return flag;
@@ -28,12 +28,12 @@ public class PCdevice implements Serializable {
         this.flag = flag;
     }
 
-    public String getIpaddr() {
-        return ipaddr;
+    public String getUid() {
+        return uid;
     }
 
-    public void setIpaddr(String ipaddr) {
-        this.ipaddr = ipaddr;
+    public void setUid(String pcnum) {
+        this.uid = pcnum;
     }
 
     public String getMac() {
@@ -48,17 +48,17 @@ public class PCdevice implements Serializable {
     public String toString() {
         return "PCdevice{" +
                 "flag=" + flag +
-                ", ipaddr='" + ipaddr + '\'' +
+                ", uid='" + uid + '\'' +
                 ", mac='" + mac + '\'' +
-                ", pcname='" + pcname + '\'' +
+                ", pcName='" + pcName + '\'' +
                 '}';
     }
 
     public String getPcname() {
-        return pcname;
+        return pcName;
     }
 
     public void setPcname(String pcname) {
-        this.pcname = pcname;
+        this.pcName = pcname;
     }
 }

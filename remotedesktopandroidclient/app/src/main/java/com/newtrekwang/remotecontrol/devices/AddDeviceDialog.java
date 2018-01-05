@@ -41,7 +41,7 @@ public class AddDeviceDialog extends BottomSheetDialogFragment {
     //    设备名编辑框
     @BindView(R.id.adddevice_et_name)
     EditText adddeviceEtName;
-    //    设备IP编辑框
+    //    设备唯一码编辑框
     @BindView(R.id.adddevice_et_ip)
     EditText adddeviceEtIp;
     //    添加按钮
@@ -99,7 +99,7 @@ public class AddDeviceDialog extends BottomSheetDialogFragment {
         adddeviceEtName.setError(null);
 
 //        保存用户输入的变量
-        String ip = adddeviceEtIp.getText().toString();
+        String num = adddeviceEtIp.getText().toString();
         String name = adddeviceEtName.getText().toString();
 
         boolean cancel = false;
@@ -111,8 +111,8 @@ public class AddDeviceDialog extends BottomSheetDialogFragment {
             focusView = adddeviceEtName;
         }
 //        检查iP
-        if (TextUtils.isEmpty(ip)) {
-            adddeviceEtIp.setError("IP不能为空！");
+        if (TextUtils.isEmpty(num)) {
+            adddeviceEtIp.setError("唯一码不能为空！");
             cancel = true;
             focusView = adddeviceEtIp;
         }
@@ -123,7 +123,7 @@ public class AddDeviceDialog extends BottomSheetDialogFragment {
         } else {
 //            登录任务启动
             showProgress(true);//显示进度条
-            startAddTask(name, ip);
+            startAddTask(name, num);
         }
     }
 
@@ -141,13 +141,13 @@ public class AddDeviceDialog extends BottomSheetDialogFragment {
      * 开始填加任务
      *
      * @param name 设备名
-     * @param ip   ip
+     * @param num   电脑唯一码
      */
-    private void startAddTask(String name, String ip) {
+    private void startAddTask(String name, String num) {
         String sessionid = (String) SharePreferenceUtil.getParam(getActivity(), Constants.SESSIONID, "");
         String phone = (String) SharePreferenceUtil.getParam(getActivity(), Constants.PHONE, "");
 
-        modelManager.addPcByIp(phone, ip, sessionid, name)
+        modelManager.addPcByNum(phone, sessionid, num,name)
                 .subscribe(new SubscriberCallBack<Result>(new ApiCallBack<Result>() {
                     @Override
                     public void onStart(Disposable d) {

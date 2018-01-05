@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">RemoteControl</string>
+    <string name="app_name">306远控</string>
     <string name="action_help">帮助</string>
     <string name="action_settings">设置</string>
     <string name="connect">连接</string>

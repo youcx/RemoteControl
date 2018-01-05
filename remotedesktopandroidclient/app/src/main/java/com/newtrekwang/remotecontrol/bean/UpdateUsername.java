@@ -4,46 +4,47 @@ package com.newtrekwang.remotecontrol.bean;
  * Created by You on 2017/11/5.
  */
 public class UpdateUsername {
+    private String phoneNum;
+    private String sessionId;
+    private String userName;
     public String getPhonenum() {
-        return phonenum;
+        return phoneNum;
     }
 
     public void setPhonenum(String phonenum) {
-        this.phonenum = phonenum;
+        this.phoneNum = phonenum;
     }
 
     public String getSessionid() {
-        return sessionid;
+        return sessionId;
     }
 
     public void setSessionid(String sessionid) {
-        this.sessionid = sessionid;
+        this.sessionId = sessionid;
     }
 
     public String getUsername() {
-        return username;
+        return userName;
     }
 
     public void setUsername(String username) {
-        this.username = username;
+        this.userName = username;
     }
 
     @Override
     public String toString() {
         return "UpdateUsername{" +
-                "phonenum='" + phonenum + '\'' +
-                ", sessionid='" + sessionid + '\'' +
-                ", username='" + username + '\'' +
+                "phoneNum='" + phoneNum + '\'' +
+                ", sessionId='" + sessionId + '\'' +
+                ", userName='" + userName + '\'' +
                 '}';
     }
 
     public UpdateUsername(String phonenum, String sessionid, String username) {
-        this.phonenum = phonenum;
-        this.sessionid = sessionid;
-        this.username = username;
+        this.phoneNum = phonenum;
+        this.sessionId = sessionid;
+        this.userName = username;
     }
 
-    private String phonenum;
-    private String sessionid;
-    private String username;
+
 }

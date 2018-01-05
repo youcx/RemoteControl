@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 <item android:title="设备"
-    android:icon="@drawable/connect"
+    android:icon="@drawable/touchpad"
     android:id="@+id/bottom_device"/>
     <item android:title="发现"
-        android:icon="@drawable/touchpad"
+        android:icon="@drawable/connect"
         android:id="@+id/bottom_find"/>
     <item android:title="我的"
-        android:icon="@drawable/file_transfer"
+        android:icon="@drawable/ic_person_black_24dp"
         android:id="@+id/bottom_my"/>
 </menu>

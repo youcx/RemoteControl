@@ -12,6 +12,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AutoCompleteTextView;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -44,7 +45,7 @@ public abstract class BaseLoginActivity extends AppCompatActivity {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
                 if (id == R.id.login || id == EditorInfo.IME_NULL) {
-                    Log.e(TAG, "onEditorAction: >>>>>>>>>>>>>");
+                    Log.e(TAG, "onEditorAction: >>>>>>>>");
                     attemptLogin();
                     return true;
                 }
@@ -122,7 +123,7 @@ public abstract class BaseLoginActivity extends AppCompatActivity {
      * 检查密码有效性
      */
     private boolean isPasswordValid(String password) {
-        return password.length() > 4;
+        return password.length() > 5;
     }
 
     /**

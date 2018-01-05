@@ -1,7 +1,11 @@
 package com.newtrekwang.remotecontrol.my;
 
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -98,7 +102,6 @@ public class MyFragment extends Fragment implements View.OnClickListener {
       View  contentView = LayoutInflater.from(getActivity()).inflate(R.layout.profile_content_2, null, false);
 
         contentView.findViewById(R.id.person_userName).setOnClickListener(this);//修改用户名点击监听
-        contentView.findViewById(R.id.person_phone).setOnClickListener(this);//修改手机号点击监听
         contentView.findViewById(R.id.person_setPwd).setOnClickListener(this);//修改密码点击监听
         contentView.findViewById(R.id.person_set).setOnClickListener(this);//设置点击监听
         contentView.findViewById(R.id.person_about).setOnClickListener(this);//关于点击监听
@@ -187,67 +190,69 @@ public class MyFragment extends Fragment implements View.OnClickListener {
                         })
                         .show();
                 break;
-            case R.id.person_phone://修改手机号
-                final NiftyDialogBuilder dialogBuilder_2 = NiftyDialogBuilder.getInstance(getActivity());
-                final EditText edittext_2 = new EditText(getActivity());
-                edittext_2.setTextColor(Color.WHITE);
-                dialogBuilder_2
-                        .withTitle("编辑手机号")                                  //.withTitle(null)  no title
-                        .withTitleColor("#FFFFFF")                                  //def
-                        .withDividerColor("#11000000")                              //def
-                        .withMessage(null)                     //.withMessage(null)  no Msg
-                        .withMessageColor("#FFFFFFFF")                              //def  | withMessageColor(int resid)
-                        .withDialogColor("#009688")                               //def  | withDialogColor(int resid)
-                        .withDuration(500)//def
-                        .withEffect(Effectstype.Fall)
-                        .withButton1Text("确定")                                      //def gone
-                        .isCancelableOnTouchOutside(true)                           //def    | isCancelable(true)
-                        .setCustomView(edittext_2, getActivity())
-                        .setButton1Click(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                String str = edittext_2.getText().toString();
-                                if (!TextUtils.isEmpty(str)) {
-                                    updatePhone(str);
-                                }
-                                dialogBuilder_2.dismiss();
-                            }
-                        })
-                        .show();
-                break;
+//            case R.id.person_phone://修改手机号
+//                final NiftyDialogBuilder dialogBuilder_2 = NiftyDialogBuilder.getInstance(getActivity());
+//                final EditText edittext_2 = new EditText(getActivity());
+//                edittext_2.setTextColor(Color.WHITE);
+//                dialogBuilder_2
+//                        .withTitle("编辑手机号")                                  //.withTitle(null)  no title
+//                        .withTitleColor("#FFFFFF")                                  //def
+//                        .withDividerColor("#11000000")                              //def
+//                        .withMessage(null)                     //.withMessage(null)  no Msg
+//                        .withMessageColor("#FFFFFFFF")                              //def  | withMessageColor(int resid)
+//                        .withDialogColor("#009688")                               //def  | withDialogColor(int resid)
+//                        .withDuration(500)//def
+//                        .withEffect(Effectstype.Fall)
+//                        .withButton1Text("确定")                                      //def gone
+//                        .isCancelableOnTouchOutside(true)                           //def    | isCancelable(true)
+//                        .setCustomView(edittext_2, getActivity())
+//                        .setButton1Click(new View.OnClickListener() {
+//                            @Override
+//                            public void onClick(View v) {
+//                                String str = edittext_2.getText().toString();
+//                                if (!TextUtils.isEmpty(str)) {
+//                                    updatePhone(str);
+//                                }
+//                                dialogBuilder_2.dismiss();
+//                            }
+//                        })
+//                        .show();
+//                break;
             case R.id.person_setPwd://修改密码
-                final NiftyDialogBuilder dialogBuilder_3 = NiftyDialogBuilder.getInstance(getActivity());
-                final EditText edittext_3 = new EditText(getActivity());
-                edittext_3.setTextColor(Color.WHITE);
-                dialogBuilder_3
-                        .withTitle("编辑密码")                                  //.withTitle(null)  no title
-                        .withTitleColor("#FFFFFF")                                  //def
-                        .withDividerColor("#11000000")                              //def
-                        .withMessage(null)                     //.withMessage(null)  no Msg
-                        .withMessageColor("#FFFFFFFF")                              //def  | withMessageColor(int resid)
-                        .withDialogColor("#009688")                               //def  | withDialogColor(int resid)
-                        .withDuration(500)//def
-                        .withEffect(Effectstype.Fall)
-                        .withButton1Text("确定")                                      //def gone
-                        .isCancelableOnTouchOutside(true)                           //def    | isCancelable(true)
-                        .setCustomView(edittext_3, getActivity())
-                        .setButton1Click(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                String str = edittext_3.getText().toString();
-                                if (!TextUtils.isEmpty(str)) {
-                                    updatePwd(str);
-                                }
-                                dialogBuilder_3.dismiss();
-                            }
-                        })
-                        .show();
+                changePasswdDialog();
+//                final NiftyDialogBuilder dialogBuilder_3 = NiftyDialogBuilder.getInstance(getActivity());
+//                final EditText edittext_3 = new EditText(getActivity());
+//                edittext_3.setTextColor(Color.WHITE);
+//                dialogBuilder_3
+//                        .withTitle("密码修改")                                  //.withTitle(null)  no title
+//                        .withTitleColor("#FFFFFF")                                  //def
+//                        .withDividerColor("#11000000")                              //def
+//                        .withMessage(null)                     //.withMessage(null)  no Msg
+//                        .withMessageColor("#FFFFFFFF")                              //def  | withMessageColor(int resid)
+//                        .withDialogColor("#009688")                               //def  | withDialogColor(int resid)
+//                        .withDuration(500)//def
+//                        .withEffect(Effectstype.Fall)
+//                        .withButton1Text("确定")                                      //def gone
+//                        .isCancelableOnTouchOutside(true)                           //def    | isCancelable(true)
+//                        .setCustomView(edittext_3, getActivity())
+//                        .setButton1Click(new View.OnClickListener() {
+//                            @Override
+//                            public void onClick(View v) {
+//                                String newpasswd = edittext_3.getText().toString();
+//                                if (!TextUtils.isEmpty(newpasswd)) {
+//                                    updatePwd(newpasswd);
+//                                    Log.i("TAG","更行密码成功");
+//                                }
+//                                dialogBuilder_3.dismiss();
+//                            }
+//                        })
+//                        .show();
                 break;
             case R.id.person_set:
                 showToast("set");
                 break;
             case R.id.person_about:
-                showToast("about");
+                showToast("306远程控制");
                 break;
             default:
                 break;
@@ -255,13 +260,44 @@ public class MyFragment extends Fragment implements View.OnClickListener {
     }
 
 
-
     /**
-     * 更新密码
-     * @param str 新密码
+     * 重置密码
+     * @param phonenum
+     * @param sessionid
+     * @param oldpwd
+     * @param newpwd
      */
-    private void updatePwd(String str) {
+    private void updatePwd(String phonenum,String sessionid,String oldpwd,String newpwd) {
+        modelManager=new ModelManager();
+        modelManager.Updateuserpasswd(phonenum,sessionid,oldpwd,newpwd)
+                .subscribe(new SubscriberCallBack<Result>(new ApiCallBack<Result>() {
+                    @Override
+                    public void onStart(Disposable d) {
+                        compositeDisposable.add(d);
+                    }
 
+                    @Override
+                    public void onFailed(int code, String msg, Throwable e) {
+                        showToast(msg+"修改密码失败"+code);
+                        Log.e("Failed",e.getMessage());
+                    }
+
+                    @Override
+                    public void onNext(Result result) {
+                        if (result!=null){
+                            if (result.getStatus()==1){
+                                showToast(result.getMsg());
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCompleted() {
+                        Log.e("TAG","success");
+                        Intent intent=new Intent(getActivity(),LoginActivity.class);
+                        startActivity(intent);
+                    }
+                }));
     }
 
     /**
@@ -273,7 +309,7 @@ public class MyFragment extends Fragment implements View.OnClickListener {
     }
 
     /**
-     * 跟新用户名
+     * 更新用户名
      * @param username 新用户名
      */
     private void updateuserName(String phonenum, String sessionid, String username) {
@@ -314,6 +350,66 @@ public class MyFragment extends Fragment implements View.OnClickListener {
      */
     private void showToast(String str){
         Toast.makeText(getActivity(), str, Toast.LENGTH_SHORT).show();
+    }
+
+    /**
+     * 密码更新对话框
+     */
+    protected void changePasswdDialog() {
+
+        LayoutInflater factory = LayoutInflater.from(getActivity());
+        final View textEntryView = factory.inflate(R.layout.change_passwd, null);
+        final EditText oldpwdet = (EditText) textEntryView.findViewById(R.id.oldpwd_edit);
+        final EditText newpwdet = (EditText)textEntryView.findViewById(R.id.newpwd_edit);
+        AlertDialog.Builder ad1 = new AlertDialog.Builder(getActivity());
+        ad1.setTitle("密码修改:");
+        ad1.setIcon(android.R.drawable.ic_dialog_info);
+        ad1.setView(textEntryView);
+        ad1.setPositiveButton("是", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int i) {
+
+            }
+        });
+        ad1.setNegativeButton("否", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int i) {
+
+            }
+        });
+        //ad1.show();// 显示对话框
+        final AlertDialog dialog=ad1.create();
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                boolean canChange=true;
+                String oldpwd=oldpwdet.getText().toString();
+                String newpwd=newpwdet.getText().toString();
+                if(TextUtils.isEmpty(oldpwd))
+                {
+                    oldpwdet.setError("原始密码不能为空");
+                    canChange=false;
+                    oldpwdet.requestFocus();
+                }else if(TextUtils.isEmpty(newpwd))
+                {
+                    newpwdet.setError("新密码不能为空");
+                    canChange=false;
+                    newpwdet.requestFocus();
+                }else if(newpwd.length()<6){
+                    newpwdet.setError("密码太短");
+                    canChange=false;
+                    newpwdet.requestFocus();
+                }
+                if(canChange)
+                {
+                    String phonenum=(String)SharePreferenceUtil.getParam(getActivity(),Constants.PHONE,"");//获取电话号码
+                    String sessionid=(String)SharePreferenceUtil.getParam(getActivity(),Constants.SESSIONID,"");
+                    updatePwd(phonenum,sessionid,oldpwd,newpwd);
+                    dialog.dismiss();
+                }
+            }
+        });
+
     }
 
 }

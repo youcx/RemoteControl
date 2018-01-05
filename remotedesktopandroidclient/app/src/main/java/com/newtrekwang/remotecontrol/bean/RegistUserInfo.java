@@ -7,23 +7,23 @@ package com.newtrekwang.remotecontrol.bean;
  */
 public class RegistUserInfo {
     //    手机号
-    private  String phonenum;
+    private  String phoneNum;
     //    密码
     private String password;
 //    用户名
-    private String username;
+    private String userName;
 
     public RegistUserInfo(String phonenum, String password,String username) {
-        this.phonenum = phonenum;
+        this.phoneNum = phonenum;
         this.password = password;
-        this.username=username;
+        this.userName=username;
     }
     public String getPhonenum() {
-        return phonenum;
+        return phoneNum;
     }
 
     public void setPhonenum(String phonenum) {
-        this.phonenum = phonenum;
+        this.phoneNum = phonenum;
     }
 
     public String getPassword() {
@@ -37,16 +37,16 @@ public class RegistUserInfo {
     @Override
     public String toString() {
         return "RegistUserInfo{" +
-                "phonenum='" + phonenum + '\'' +
+                "phoneNum='" + phoneNum + '\'' +
                 ", password='" + password + '\'' +
                 '}';
     }
 
     public String getUsername() {
-        return username;
+        return userName;
     }
 
     public void setUsername(String username) {
-        this.username = username;
+        this.userName = username;
     }
 }

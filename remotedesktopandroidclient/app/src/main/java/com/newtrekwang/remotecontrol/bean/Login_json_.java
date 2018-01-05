@@ -7,42 +7,45 @@ import java.io.Serializable;
  */
 
 public class Login_json_  implements Serializable {
+
+    private String phoneNum;
+    private String userName;
+    private String sessionId;
     public void setPhonenum(String phonenum) {
-        this.phonenum = phonenum;
+        this.phoneNum = phonenum;
     }
 
     public void setUsername(String username) {
-        this.username = username;
+        this.userName = username;
     }
 
     public void setSessionid(String sessionid) {
-        this.sessionid = sessionid;
+        this.sessionId = sessionid;
     }
 
-    private String phonenum;
-    private String username;
+
 
     @Override
     public String toString() {
         return "Login_json_{" +
-                "phonenum='" + phonenum + '\'' +
-                ", username='" + username + '\'' +
-                ", sessionid='" + sessionid + '\'' +
+                "phoneNum='" + phoneNum + '\'' +
+                ", userName='" + userName + '\'' +
+                ", sessionId='" + sessionId + '\'' +
                 '}';
     }
 
     public String getPhonenum() {
-        return phonenum;
+        return phoneNum;
     }
 
     public String getUsername() {
-        return username;
+        return userName;
     }
 
     public String getSessionid() {
-        return sessionid;
+        return sessionId;
     }
 
-    private String sessionid;
+
 
 }

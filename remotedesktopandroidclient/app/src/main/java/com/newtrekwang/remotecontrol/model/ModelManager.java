@@ -2,16 +2,19 @@ package com.newtrekwang.remotecontrol.model;
 
 import android.util.Log;
 
+import com.newtrekwang.remotecontrol.bean.DeletePcByUID;
 import com.newtrekwang.remotecontrol.bean.Device;
 import com.newtrekwang.remotecontrol.bean.LoginUserInfo;
 import com.newtrekwang.remotecontrol.bean.Login_json_;
 import com.newtrekwang.remotecontrol.bean.PCdevice;
 import com.newtrekwang.remotecontrol.bean.PcByIp;
 import com.newtrekwang.remotecontrol.bean.PcByMac;
+import com.newtrekwang.remotecontrol.bean.PcByNum;
 import com.newtrekwang.remotecontrol.bean.RegistUserInfo;
 import com.newtrekwang.remotecontrol.bean.Result;
 import com.newtrekwang.remotecontrol.bean.SessionUser;
 import com.newtrekwang.remotecontrol.bean.UpdateUsername;
+import com.newtrekwang.remotecontrol.bean.UpdateUserpasswd;
 import com.newtrekwang.remotecontrol.http.MyHttpClient;
 
 import java.util.ArrayList;
@@ -115,9 +118,34 @@ public class ModelManager {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
-   /*
-   更新用户名
-   */
+
+    /**
+     * 通过随机码添加PC
+     * @param phone
+     * @param session
+     * @param pcnum
+     * @param pcname
+     * @return
+     */
+    public Observable<Result> addPcByNum(String phone,String session,String  pcnum,String pcname){
+        PcByNum pcByNum=new PcByNum(phone,pcnum,session,pcname);
+        Log.i(TAG, "addPcByNum: >>>>>>>>"+pcByNum);
+        return MyHttpClient
+                .getApi()
+                .addPCByNum(pcByNum)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+
+    /**
+     * 更新用户名
+     * @param phoneunm
+     * @param sessionid
+     * @param username
+     * @return
+     */
+
    public Observable<Result>Updateusername(String phoneunm,String sessionid,String username){
        UpdateUsername updateUsername=new UpdateUsername(phoneunm,sessionid,username);
        return MyHttpClient
@@ -127,7 +155,38 @@ public class ModelManager {
                .observeOn(AndroidSchedulers.mainThread());
    }
 
+    /**
+     * 修改用户密码
+     * @param phonenum
+     * @param sessionid
+     * @param oldpasswd
+     * @param newpasswd
+     * @return
+     */
+    public Observable<Result>Updateuserpasswd(String phonenum,String sessionid,String oldpasswd,String newpasswd){
+        UpdateUserpasswd updateUserpasswd=new UpdateUserpasswd(phonenum,sessionid,oldpasswd,newpasswd);
+        return MyHttpClient
+                .getApi()
+                .Updateuserpasswd(updateUserpasswd)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
 
-
+    /**
+     * 删除电脑
+     * @param phonenum
+     * @param session
+     * @param uid
+     * @return
+     */
+    public Observable<Result> deletepcbyuid(String phonenum,String session,String  uid){
+        DeletePcByUID deletepc=new DeletePcByUID(phonenum,session,uid);
+        Log.i(TAG, "addPcByNum: >>>>>>>>"+deletepc);
+        return MyHttpClient
+                .getApi()
+                .deletepcbyuid(deletepc)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
 
 }

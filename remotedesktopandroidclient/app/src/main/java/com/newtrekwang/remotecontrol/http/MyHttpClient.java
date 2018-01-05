@@ -23,7 +23,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 public class MyHttpClient {
     //    服务端接口基地址
-    public static final String BASE_URL = "http://119.29.201.35/RemoteControl/";
+   //public static final String BASE_URL = "http://192.168.1.101:8080/remote/";
+    public static final String BASE_URL = "http://222.196.33.254:8080/rm_httpserver/";
     //    默认链接超时
     private static final int DEFAULT_TIMEOUT = 5;
     //

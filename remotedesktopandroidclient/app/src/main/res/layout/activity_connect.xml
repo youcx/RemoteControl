@@ -15,21 +15,40 @@
        tools:layout_editor_absoluteX="8dp" />
    <Button
        android:id="@+id/btn_input"
-       android:text="键盘"
-       android:layout_marginBottom="-25dp"
+       android:text=""
+       android:layout_marginBottom="-35dp"
+       android:background="@drawable/ic_drawer"
        android:layout_centerHorizontal="true"
        android:layout_alignBottom="@+id/mshow"
        android:layout_width="wrap_content"
        android:layout_height="wrap_content" />
+
+   <Button
+       android:id="@+id/btn_zoom_out"
+       android:background="@mipmap/ic_zoomout"
+       android:layout_toLeftOf="@+id/btn_zoom_in"
+       android:layout_marginRight="10dp"
+       android:layout_marginBottom="0dp"
+       android:layout_alignBottom="@+id/mshow"
+       android:layout_width="20dp"
+       android:layout_height="20dp" />
    <android.inputmethodservice.KeyboardView
        android:id="@+id/mKeyView"
-       android:layout_width="wrap_content"
-       android:layout_height="wrap_content"
+       android:layout_width="match_parent"
+       android:layout_height="match_parent"
        android:focusable="true"
        android:focusableInTouchMode="true"
        android:layout_alignBottom="@+id/mshow"
        android:layout_alignRight="@+id/mshow"
        android:visibility="gone"/>
+
+   <Button
+       android:id="@+id/btn_zoom_in"
+       android:background="@mipmap/ic_zoomin"
+       android:layout_alignParentBottom="true"
+       android:layout_alignParentEnd="true"
+       android:layout_width="20dp"
+       android:layout_height="20dp" />
 
 
 </RelativeLayout>

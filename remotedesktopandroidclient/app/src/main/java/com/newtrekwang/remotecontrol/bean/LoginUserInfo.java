@@ -7,21 +7,21 @@ package com.newtrekwang.remotecontrol.bean;
  */
 public class LoginUserInfo {
 //    手机号
-    private  String phonenum;
+    private  String phoneNum;
 //    密码
     private String password;
 
     public LoginUserInfo(String phone, String password) {
-        this.phonenum = phone;
+        this.phoneNum = phone;
         this.password = password;
     }
 
     public String getPhone() {
-        return phonenum;
+        return phoneNum;
     }
 
     public void setPhone(String phone) {
-        this.phonenum = phone;
+        this.phoneNum = phone;
     }
 
     public String getPassword() {
@@ -35,7 +35,7 @@ public class LoginUserInfo {
     @Override
     public String toString() {
         return "LoginUserInfo{" +
-                "phonenum='" + phonenum + '\'' +
+                "phoneNum='" + phoneNum + '\'' +
                 ", password='" + password + '\'' +
                 '}';
     }

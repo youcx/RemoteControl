@@ -12,7 +12,7 @@ import com.newtrekwang.remotecontrol.CustomApplication;
 import com.newtrekwang.remotecontrol.util.BytesUtil;
 import com.newtrekwang.remotecontrol.util.HexString;
 import com.newtrekwang.remotecontrol.util.IpUtil;
-
+import com.newtrekwang.remotecontrol.util.PcNumUtil;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -29,19 +29,19 @@ import java.net.Socket;
 public class ConnectService extends IntentService {
     private static final String TAG = "ConnectService>>>>>";
     //    TCP服务端IP
-   // public static final String IP = "192.168.1.112";
-    public static final String IP = "119.29.201.35";
+    //public static final String IP = "192.168.1.113";
+    public static final String IP = "222.196.33.254";
     //    TCP服务端端口
     //public static final int PORT=12346;
-    public static final int PORT = 9000;
+    public static final int PORT = 9999;
     //  广播管理器
     private LocalBroadcastManager mLocalBroadcastManager;
     //    广播消息类型标志
     public static final String CONNECT_BROADCAST_ACTION = "com.newtrekwang.connect";
     public static final String CONNECT_PROGRESS_BROADCAST_ACTION = "com.newtrekwang.connect";
     public static final String SHOWIMAGE_BROADCAST_ACTION = "showimage";
-    //    要连接的设备IP，需要从intent中获取
-    private String pcip;
+    //    要连接的设备唯一码，需要从intent中获取
+    private String pcnum;
     //    双缓存图片id；
     private int pic_id;
 
@@ -78,7 +78,7 @@ public class ConnectService extends IntentService {
      */
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
-        pcip = intent.getStringExtra("pcip");
+        pcnum = intent.getStringExtra("pcnum");
         connectToServer(IP, PORT);//开始TCP连接
     }
 
@@ -124,9 +124,9 @@ public class ConnectService extends IntentService {
             byte[] bytes = new byte[8];
             bytes[0] = 1;
             bytes[1] = 2;
-            byte[] ipbytes = IpUtil.getBytesFromIPString(pcip);//IP字符串转换为字节数据
-            System.arraycopy(ipbytes, 0, bytes, 2, 4);
-            Log.i(TAG, "sendMe: >>>>>>发送IP  : " + pcip + "    " + HexString.bytesToHex(bytes));
+            byte[] ipbytes = pcnum.getBytes();//电脑唯一码转换为字节数据
+            System.arraycopy(ipbytes, 0, bytes, 2, 6);
+            Log.i(TAG, "sendMe: >>>>>>发送IP  : " + pcnum + "    " + HexString.bytesToHex(bytes));
             outputStream.write(bytes);
             outputStream.flush();
 
@@ -137,7 +137,7 @@ public class ConnectService extends IntentService {
             bytes1[1] = 4;
             Log.i(TAG, "sendMe: 发送开始图片指令" + HexString.bytesToHex(bytes1));
             outputStream.write(bytes1);
-            Log.i(TAG, "sendMe: 发送开始图片指令" + HexString.bytesToHex(bytes1));
+            Log.i(TAG, "sendMe: 发送开始图片指令成功" + HexString.bytesToHex(bytes1));
             outputStream.flush();
 
         } catch (IOException e) {
@@ -155,7 +155,7 @@ public class ConnectService extends IntentService {
             inputStream = socket.getInputStream();
             while (i) {
                 byte[] header=new byte[8];
-                byte[] bytes = new byte[1024];
+                byte[] bytes = new byte[2048];
                 int length = 0;
 //                首先读取8个字节的包头，read方法会阻塞直到读到数据
                 length = inputStream.read(header, 0, 8);
@@ -174,24 +174,35 @@ public class ConnectService extends IntentService {
                             //InputMethodManager inputMethodManager=(InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                             //inputMethodManager.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
                             // TODO: 2017/7/30
+                            if(header[1]==3)
+                            {
+                                Log.i(TAG,"电脑不在线");
+                                sendServiceStatus("当前电脑不在线");
+                            }
                             break;
                         case 2:
                             if ((header[1] == 2)) {//发来是图片
                                // File file = new File(getFilesDir(), "1.webp");
-                                File file;
+                                //File file;
                                 //双图片进行缓冲
+                                FileOutputStream fileOutputStream;
                                 if(pic_id==1)
-                                file=new File("/storage/emulated/0/pc_screen1.webp");
-                                else
-                                file=new File("/storage/emulated/0/pc_screen2.webp");
-
-                                if (!file.exists()) {
-                                    file.createNewFile();
+                                //file=new File("/storage/emulated/0/pc_screen1.webp");
+                                {
+                                    fileOutputStream = openFileOutput("pc_screen1.webp", Context.MODE_PRIVATE);
                                 }
+                                else
+                                {
+                                    fileOutputStream = openFileOutput("pc_screen2.webp", Context.MODE_PRIVATE);
+                                }
+//                                file=new File("/storage/emulated/0/pc_screen2.webp");
+//                                if (!file.exists()) {
+//                                    file.createNewFile();
+//                                }
                                 int size = 0;
-                                FileOutputStream fileOutputStream = new FileOutputStream(file);
+                                //FileOutputStream fileOutputStream = new FileOutputStream(file);
                                 while (size != bodyLength) {
-                                    if(bodyLength-size>=1024)
+                                    if(bodyLength-size>=2048)
                                     length = inputStream.read(bytes);
                                     else
                                         length=inputStream.read(bytes,0,bodyLength-size);
@@ -200,17 +211,19 @@ public class ConnectService extends IntentService {
                                  //   Log.i(TAG, "dealRead: >>>>>>>收到长度" + size);
                                   //  Log.i(TAG,"dealRead: >>>>>>>已完成"+size/bodyLength*100+"%");
                                 }
-                                Log.i(TAG, "dealRead: 结束接收文件保存文件在" + file.getAbsolutePath());
+                                Log.i(TAG, "dealRead: 结束接收文件保存文件在" + "file.getAbsolutePath()");
                                 fileOutputStream.close();
 //                            广播通知显示图片
                                 Intent intent = new Intent(SHOWIMAGE_BROADCAST_ACTION);
-
-                                intent.putExtra("path", file.getAbsoluteFile().toString());
-                                mLocalBroadcastManager.sendBroadcast(intent);
-                                if(pic_id==1)
+                                if(pic_id==1) {
+                                    intent.putExtra("filename", "pc_screen1.webp");
                                     pic_id=2;
-                                else
+                                }
+                                else {
+                                    intent.putExtra("filename", "pc_screen2.webp");
                                     pic_id=1;
+                                }
+                                mLocalBroadcastManager.sendBroadcast(intent);
                             } else
                             {
                                 i=false;
@@ -225,7 +238,7 @@ public class ConnectService extends IntentService {
             }
         } catch (IOException e) {
             e.printStackTrace();
-            sendServiceStatus("流异常！");
+            sendServiceStatus("断开连接！");
         }
     }
 

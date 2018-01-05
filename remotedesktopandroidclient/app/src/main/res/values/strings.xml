@@ -1,5 +1,7 @@
-<resources>
-    <string name="app_name">RemoteControl</string>
+<resources
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="MissingTranslation">
+    <string name="app_name">306远控</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -27,7 +29,7 @@
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_help">HelpActivity</string>
     <string name="title_activity_music_control">MusicControl</string>
-    <string name="left_click">左点击</string>
-    <string name="right_click">右点击</string>
+    <string name="left_click">LeftClick</string>
+    <string name="right_click">RightClick</string>
 
 </resources>

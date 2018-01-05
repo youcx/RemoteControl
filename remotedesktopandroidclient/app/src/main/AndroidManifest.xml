@@ -26,7 +26,8 @@
         </activity>
         <service android:name=".service.ConnectService"/>
         <activity android:name=".login.LoginActivity"/>
-<activity android:name=".login.SplashActivity">
+<activity android:name=".login.SplashActivity"
+    android:theme="@style/AppTheme.NoActionBar">
     <intent-filter>
         <action android:name="android.intent.action.MAIN" />
         <category android:name="android.intent.category.LAUNCHER" />

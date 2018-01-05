@@ -46,7 +46,7 @@ public class BytesUtil {
     }
 
     /**
-     * @功能 短整型与字节的转换
+     * @功能 短整型转字节数组
      * @param number
      * @return 两位的字节数组
      */
@@ -61,7 +61,7 @@ public class BytesUtil {
     }
 
     /**
-     * @功能 字节的转换与短整型
+     * @功能 字节数组转短整型
      * @param b
      * @return 短整型
      */
@@ -88,7 +88,7 @@ public class BytesUtil {
     }
 
     /**
-     * @方法功能 整型与字节数组的转换
+     * @方法功能 整型转字节数组
      * @param i
      * @return 四位的字节数组
      */
@@ -102,7 +102,7 @@ public class BytesUtil {
     }
 
     /**
-     * @方法功能 字节数组和整型的转换
+     * @方法功能 字节数组转整型
      * @param bytes
      * @return 整型
      */

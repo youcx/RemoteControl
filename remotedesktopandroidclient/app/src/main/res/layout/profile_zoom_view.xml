@@ -9,7 +9,7 @@
         android:id="@+id/iv_zoom"
         android:layout_width="match_parent"
         android:layout_height="280dp"
-        android:src="@color/colorAccent"
+        android:src="#5CACEE"
         android:scaleType="centerCrop"
         android:layout_gravity="center_horizontal"
         />
