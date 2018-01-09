@@ -195,7 +195,7 @@ public class ConnectActivity extends AppCompatActivity{
      */
     @Override
     public void onDestroy() {
-        super.onDestroy();
+
 //        解除广播注册
         mLocalBroadcastManager.unregisterReceiver(broadcastReceiver);
         Intent intent=new Intent(ConnectActivity.this, ConnectService.class);
@@ -209,6 +209,7 @@ public class ConnectActivity extends AppCompatActivity{
             Log.i(TAG,"退出异常");
             e.printStackTrace();
         }
+        super.onDestroy();
     }
 
 

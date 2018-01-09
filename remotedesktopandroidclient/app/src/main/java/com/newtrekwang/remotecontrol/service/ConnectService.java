@@ -29,7 +29,7 @@ import java.net.Socket;
 public class ConnectService extends IntentService {
     private static final String TAG = "ConnectService>>>>>";
     //    TCP服务端IP
-    //public static final String IP = "192.168.1.113";
+    //public static final String IP = "192.168.1.114";
     public static final String IP = "222.196.33.254";
     //    TCP服务端端口
     //public static final int PORT=12346;

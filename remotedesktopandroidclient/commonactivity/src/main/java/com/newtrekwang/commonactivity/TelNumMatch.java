@@ -16,6 +16,10 @@ public class TelNumMatch {
     static String YD = "^[1]{1}(([3]{1}[4-9]{1})|([5]{1}[012789]{1})|([8]{1}[12378]{1})|([4]{1}[7]{1}))[0-9]{8}$";
     static String LT = "^[1]{1}(([3]{1}[0-2]{1})|([5]{1}[56]{1})|([8]{1}[56]{1}))[0-9]{8}$";
     static String DX = "^[1]{1}(([3]{1}[3]{1})|([5]{1}[3]{1})|([8]{1}[09]{1}))[0-9]{8}$";
+    /*
+     *号码通用匹配
+     */
+    static String PHNNUM="^((13[0-9])|(14[5|7])|(15([0-3]|[5-9]))|(18[0,1,2,5-9])|(177))\\d{8}$";
 
     String mobPhnNum;
 
@@ -58,7 +62,7 @@ public class TelNumMatch {
     public static boolean isValidPhoneNumber(String number)
     {
         boolean flag=false;
-        if(number.length()==11 && (number.matches(YD)||number.matches(LT)||number.matches(DX)))
+        if(number.length()==11 && number.matches(PHNNUM))
         {
             flag=true;
         }

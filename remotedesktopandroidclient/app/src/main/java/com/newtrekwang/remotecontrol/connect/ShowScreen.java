@@ -255,18 +255,23 @@ public class ShowScreen extends SurfaceView implements SurfaceHolder.Callback {
                         //Log.i("tag",""+screenheight+","+picheight);
                         //Log.i("tag",""+scalex+","+scaley);
                         //mMatrix.setScale(5,5);
-                        FileInputStream fis=mcontext.openFileInput(mFilePath);
-                        Bitmap mBitmap = BitmapFactory.decodeStream(fis);
-                        mCanvas = mHolder.lockCanvas();
-                        //清屏
-                        mCanvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
-                        //mCanvas.drawBitmap(mBitmap, picRect, screenRect, mPaint);
-                        mCanvas.drawBitmap(mBitmap,matrix,mPaint);
-                        mBitmap.recycle();
+                        //while循环避免获取bitmap错误
+                            FileInputStream fis = mcontext.openFileInput(mFilePath);
+                            Bitmap mBitmap = BitmapFactory.decodeStream(fis);
+                            mCanvas = mHolder.lockCanvas();
+                            //清屏
+                            mCanvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
+                            //mCanvas.drawBitmap(mBitmap, picRect, screenRect, mPaint);
+                            if (mBitmap != null) {
+                                mCanvas.drawBitmap(mBitmap, matrix, mPaint);
+                            }
+                            mBitmap.recycle();
+
                     } catch (Exception e) {
 
                     } finally {
-                        mHolder.unlockCanvasAndPost(mCanvas);
+                        if(mCanvas!=null)
+                            mHolder.unlockCanvasAndPost(mCanvas);
                         //屏幕移动时为确保流畅性，不断更新同一张位图
                         if(!isMoveM)
                         {
